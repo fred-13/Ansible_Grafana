@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: Alfred Meshcheryakov
+  description: Grafana - platform for analytics and monitoring
+  license: MIT
+  company: none
+  min_ansible_version: 2.7
+  platforms:
+    - name: EL
+      versions:
+        - 7
+  galaxy_tags:
+  - grafana
+  - dashboard
+  - alerts
+  - alerting
+  - presentation
+  - monitoring
+  - metrics
+
+dependencies: []

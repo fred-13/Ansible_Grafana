@@ -1,0 +1,19 @@
+---
+
+- name: Add Grafana repository file [RHEL/CentOS]
+  template:
+    src: "{{ grafana_yum_repo_template }}"
+    dest: "/etc/yum.repos.d/grafana.repo"
+    force: true
+    backup: true
+  when: ansible_pkg_mgr in ['yum']
+
+- name: Install Grafana
+  package:
+    name: "{{ grafana_package }}"
+    state: present
+  register: _install_packages
+  until: _install_packages is succeeded
+  retries: 5
+  delay: 2
+  notify: restart grafana

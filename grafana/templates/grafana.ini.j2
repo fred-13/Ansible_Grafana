@@ -1,0 +1,118 @@
+{{ ansible_managed | comment }}
+# More informations:
+# http://docs.grafana.org/installation/configuration
+# https://github.com/grafana/grafana/blob/master/conf/sample.ini
+
+app_mode = production
+instance_name = {{ grafana_instance }}
+
+# Directories
+[paths]
+data = {{ grafana_data_dir }}
+logs = {{ grafana_logs_dir }}
+plugins = {{ grafana_data_dir }}/plugins
+; datasources = conf/datasources
+
+# HTTP options
+[server]
+{% if grafana_server.protocol is undefined or grafana_server.protocol in ['http', 'https'] %}
+http_addr = {{ grafana_address }}
+http_port = {{ grafana_port }}
+{% endif %}
+domain = {{ grafana_domain }}
+root_url = {{ grafana_url }}
+{% for k,v in grafana_server.items() %}
+{%   if not k in ['http_addr', 'http_port', 'domain', 'root_url'] %}
+{{ k }} = {{ v }}
+{%   endif %}
+{% endfor %}
+
+# Database
+[database]
+{% for k,v in grafana_database.items() %}
+{%   if k == 'password' %}
+{{ k }} = """{{ v }}"""
+{%   else %}
+{{ k }} = {{ v }}
+{%   endif %}
+{% endfor %}
+
+# Remote cache
+[remote_cache]
+
+# Security
+[security]
+{% for k,v in grafana_security.items() %}
+{{ k }} = {{ v }}
+{% endfor %}
+
+# Users management and registration
+{% if grafana_users != {} %}
+[users]
+{%   for k,v in grafana_users.items() %}
+{{ k }} = {{ v }}
+{%   endfor %}
+{% endif %}
+[emails]
+welcome_email_on_sign_up = {{ grafana_welcome_email_on_sign_up }}
+
+# Authentication
+{% if grafana_auth != {} %}
+[auth]
+disable_login_form = {{ grafana_auth.disable_login_form | default('False') }}
+oauth_auto_login = {{ grafana_auth.oauth_auto_login | default('False') }}
+disable_signout_menu = {{ grafana_auth.disable_signout_menu | default('False') }}
+signout_redirect_url = {{ grafana_auth.signout_redirect_url | default('') }}
+{%  for section, options in grafana_auth.items() %}
+{%    if section in ['disable_login_form', 'oauth_auto_login', 'disable_signout_menu', 'signout_redirect_url'] %}
+{%    else %}
+[auth.{{ section }}]
+{%      if "enabled" not in options %}
+enabled = True
+{%      endif %}
+{%      for k, v in options.items() %}
+{{ k }} = {{ v }}
+{%      endfor %}
+{%    endif %}
+{%  endfor %}
+{% endif %}
+
+# Session
+
+# Analytics
+[analytics]
+reporting_enabled = "True"
+
+# Dashboards
+[dashboards]
+versions_to_keep = 20
+
+[dashboards.json]
+enabled = true
+path = {{ grafana_data_dir }}/dashboards
+
+# Alerting
+[alerting]
+enabled = true
+execute_alerts = True
+
+# SMTP and email config
+
+# Logging
+[log]
+mode = console, file
+level = info
+
+# Metrics
+
+# Tracing
+
+# Grafana.com configuration
+[grafana_com]
+url = https://grafana.com
+
+# Snapshots
+
+# External image storage
+
+# Panels
