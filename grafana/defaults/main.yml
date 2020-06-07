@@ -1,7 +1,7 @@
 ---
 grafana_version: 7.0.3
 grafana_yum_repo_template: etc/yum.repos.d/grafana.repo.j2
-
+firewall_enabled: true
 # Should the provisioning be kept synced. If true, previous provisioned objects will be removed if not referenced anymore.
 grafana_provisioning_synced: false
 

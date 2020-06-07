@@ -4,6 +4,7 @@
     port: 3000/tcp
     permanent: true
     state: enabled
+  when: firewall_enabled
   register: change_rules
 
 - name: Configure FireWall | Restart firewalld
