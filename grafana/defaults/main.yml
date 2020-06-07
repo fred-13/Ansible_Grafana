@@ -1,5 +1,5 @@
 ---
-grafana_version: 6.5.0
+grafana_version: 7.0.3
 grafana_yum_repo_template: etc/yum.repos.d/grafana.repo.j2
 
 # Should the provisioning be kept synced. If true, previous provisioned objects will be removed if not referenced anymore.
@@ -15,7 +15,6 @@ grafana_port: 3000
 
 # External Grafana address. Variable maps to "root_url" in grafana server section
 grafana_url: "http://{{ grafana_address }}:{{ grafana_port }}"
-grafana_api_url: "{{ grafana_url }}"
 grafana_domain: "{{ ansible_fqdn | default(ansible_host) | default('localhost') }}"
 
 # Additional options for grafana "server" section
@@ -36,12 +35,6 @@ grafana_server:
 grafana_security:
   admin_user: admin
   admin_password: "Test123"
-#  secret_key: ""
-#  login_remember_days: 7
-#  cookie_username: grafana_user
-#  cookie_remember_name: grafana_remember
-#  disable_gravatar: true
-#  data_source_proxy_whitelist:
 
 # Database setup
 grafana_database:
@@ -128,15 +121,3 @@ grafana_ldap: {}
 # Plugins from https://grafana.com/plugins
 grafana_plugins: []
 #  - raintank-worldping-app
-
-# API keys to configure
-grafana_api_keys: []
-#  - name: "admin"
-#    role: "Admin"
-#  - name: "viewer"
-#    role: "Viewer"
-#  - name: "editor"
-#    role: "Editor"
-
-# The location where the keys should be stored.
-grafana_api_keys_dir: "{{ lookup('env', 'HOME') }}/grafana/keys"

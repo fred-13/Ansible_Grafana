@@ -43,9 +43,3 @@
     - grafana_configure
     - grafana_notifications
     - grafana_run
-
-- include: api_keys.yml
-  when: grafana_api_keys | length > 0
-  tags:
-    - grafana_configure
-    - grafana_run
